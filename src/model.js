@@ -45,6 +45,7 @@ class Model {
             }
         
             var allDays = [];
+            return allDaysPre, allDaysThis, allDaysNext; 
             // return allDays = allDaysPre.concat(allDaysThis).concat(allDaysNext);
     }
 

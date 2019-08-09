@@ -1,7 +1,7 @@
 function getDates(date) {
     //метод для сборки календаря
     // if(date) {
-    // createCalendar(date); создание календаря
+     // createCalendar(date); создание календаря
     //календарь - массив объектов
     // } elseif {
     // createCalendar();
