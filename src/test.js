@@ -1,19 +1,14 @@
-import Model from './model';
-import View from './view';
-import Controller from './controller';
-import { save, load } from './helpers';
-
-const state = load();
-
-const model = new Model(state || undefined);
-model.on('change', state => save(state));
-
-const view = new View();
-const controller = new Controller(model, view);
 
 class Model extends EventEmitter {
     constructor(date, state = [], stateDate = []) {
         super();
+
+        this.state = state;
+        this.stateDate = stateDate; //массив с датами праздников
+        this.day = date.day;
+        this.month = date.month; //выбранный день, месяц и год
+        this.year = date.year;
+    }
 
         this.state = state;
         this.stateDate = stateDate; //массив с датами праздников
