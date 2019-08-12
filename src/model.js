@@ -1,5 +1,9 @@
-class Model {
+import { EventEmitter } from './helpers';
+
+class Model extends EventEmitter {
     constructor(date, state = [], stateDate = []) {
+        super();
+
         this.state = state;
         this.stateDate = stateDate; //массив с датами праздников
         // this.day = date.day;
@@ -48,25 +52,34 @@ class Model {
             return allDaysPre, allDaysThis, allDaysNext; 
             // return allDays = allDaysPre.concat(allDaysThis).concat(allDaysNext);
     }
+}
 
     getItem(id) {
-        return this.state.find(item => item.id == id);
+        return this.items.find(item => item.id == id);
     }
 
     addItem(item) {
-        this.state.push(item);
+        this.items.push(item);
+        this.emit('change', this.items);
+        return item;
     }
 
     updateItem(id, data) {
         const item = this.getItem(id);
+
         Object.keys(data).forEach(prop => item[prop] = data[prop]);
+
+        this.emit('change', this.items);
+        
+        return item;
     }
 
     removeItem(id) {
-        const index = this.state.findIndex(item => item.id = id);
-
+        const index = this.items.findIndex(item => item.id == id);
+        
         if (index > -1) {
-            this.state.splice(index, 1);
+            this.items.splice(index, 1);
+            this.emit('change', this.items);
         }
     }
 }

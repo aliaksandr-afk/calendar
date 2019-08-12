@@ -13,5 +13,5 @@ module.exports = {
         contentBase: path.join(__dirname, 'public'),
     },
 
-    devtool: 'cheap-eval-source-map'
+    devtool: 'cheap-eval-source-map' // remove for build
 };
