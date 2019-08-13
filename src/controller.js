@@ -13,8 +13,8 @@ class Controller {
     }
 
     addCalendar() {
-        const calendar = this.model.getMonthData();
-        this.view.addCalendar(calendar);
+        const month = this.model.getMonthData('2019', '09');
+        this.view.update(month);
     }
 
     addTodo(title) {

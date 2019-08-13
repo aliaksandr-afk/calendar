@@ -91,8 +91,7 @@ class View extends EventEmitter {
     }
 
 
-    update() {
-        const month = this.calendar.getMonthData(this.year, this.month);
+    update(month) {
         
         const tableBody = createElement('tbody', null,
             month.map(week =>
@@ -100,18 +99,23 @@ class View extends EventEmitter {
                     week.map(date =>
                         createElement('td', {
                             className: date && date.isToday ? 'has-background-primary has-text-white' : undefined,
-                            onclick: date ? () => this.onDateSelect(date) : undefined
+                            // onclick: date ? () => this.onDateSelect(date) : undefined
                         }, date ? date.day : '')
                     )
                 )
             )
         );
 
-        this.table.removeChild(this.tableBody);
+        // this.calendar.removeChild(tableBody);
         this.tableBody = tableBody;
-        this.table.appendChild(this.tableBody);
+        this.calendar.appendChild(this.tableBody);
+        // this.calendar.appendChild(tableBody);
     }
-    
+
+    addCalendar(dates) {
+        console.log(dates);
+    }
+
     // addCalendar(dates) {
     //     const table = document.createElement('table');
     //     const tbody = document.createElement('tbody');
