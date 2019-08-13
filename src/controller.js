@@ -13,7 +13,7 @@ class Controller {
     }
 
     addCalendar() {
-        const month = this.model.getMonthData('2019', '09');
+        const month = this.model.getMonthData(2019, 6);
         this.view.update(month);
     }
 

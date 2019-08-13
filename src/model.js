@@ -50,35 +50,54 @@ class Model extends EventEmitter {
     getMonthData(year, month) {
         // const daysInMonth = Calendar.getDaysInMonth(year, month);
         const daysInMonth = new Date(year, month + 1, 0).getDate();
+
         // const monthStartsOn = Calendar.getDayOfWeek(year, month, 1);
         const monthStartsOn = new Date(year, month, 1).getDay();
-
         // const daysInPreMonth = new Date(year, month, 0).getDate();
         // var daysInPreMonth = getDayOfWeek(year, month, 0);
         var daysInPreMonth = new Date(year, month, 0).getDate();
         const firstDayOfMonth = this.getDayOfWeek(year, month, 1);
 
-        var a = new Date(year, month);
-
         const data = [];
         let day = 1;
 
+
+
+
+        if (((daysInMonth + monthStartsOn) / this.DAYS_IN_WEEK) < 5) {
+            console.log('spec month');
+            // debugger
+            let counter = firstDayOfMonth;
+            counter += 7;
+            for (let j = 0; j < counter; j++) {
+                data[i][j] = counter--;
+                console.log(data);
+            }
+        }
+
+
         // for (let i = 0; i < (daysInMonth + monthStartsOn) / this.DAYS_IN_WEEK; i++) {
-        for (let i = 0; i < this.ALL_WEEKS; i++) {
+        for (let i = 1; i < this.ALL_WEEKS; i++) {
 
             data[i] = [];
 
             for (let j = 0; j < this.DAYS_IN_WEEK; j++) {
-                // debugger
-                console.log(a);
-                if ((i === 0 && j < monthStartsOn)) {
-                    if ((daysInMonth + monthStartsOn) / this.DAYS_IN_WEEK <= 4) {
-                        for (let i = 0; i < firstDayOfMonth; i++) {
-                            data[i][j] = daysInPreMonth--;
-                        }
-                    }
-                    //
-                }
+                
+               
+
+
+
+
+
+
+
+
+
+                // if ((i === 0 && j < monthStartsOn)) {
+                    
+                    
+                //     //
+                // }
 
 
 
@@ -97,7 +116,7 @@ class Model extends EventEmitter {
                 // }
             }
         }
-        // console.log(data);
+        console.log(data);
         return data;
     }
 
