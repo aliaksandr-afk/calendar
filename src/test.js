@@ -10,13 +10,6 @@ class Model extends EventEmitter {
         this.year = date.year;
     }
 
-        this.state = state;
-        this.stateDate = stateDate; //массив с датами праздников
-        // this.day = date.day;
-        // this.month = date.month; //выбранный день, месяц и год
-        // this.year = date.year;
-    }
-
     getCalendar(date) {
         //метод для сборки календаря
         if (date) {
@@ -55,7 +48,8 @@ class Model extends EventEmitter {
             }
         
             var allDays = [];
-            return allDaysPre, allDaysThis, allDaysNext; 
+            // return allDaysPre, allDaysThis, allDaysNext; 
             // return allDays = allDaysPre.concat(allDaysThis).concat(allDaysNext);
     }
+}
 }

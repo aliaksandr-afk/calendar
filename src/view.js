@@ -8,6 +8,8 @@ class View extends EventEmitter {
         this.input = document.getElementById('add-input');
         this.list = document.getElementById('todo-list');
 
+        this.calendar = document.getElementById('calendar');
+
         this.form.addEventListener('submit', this.handleAdd.bind(this));
     }
 
@@ -87,6 +89,54 @@ class View extends EventEmitter {
             this.list.appendChild(listItem);
         });
     }
+
+
+    update() {
+        const month = this.calendar.getMonthData(this.year, this.month);
+        
+        const tableBody = createElement('tbody', null,
+            month.map(week =>
+                createElement('tr', null,
+                    week.map(date =>
+                        createElement('td', {
+                            className: date && date.isToday ? 'has-background-primary has-text-white' : undefined,
+                            onclick: date ? () => this.onDateSelect(date) : undefined
+                        }, date ? date.day : '')
+                    )
+                )
+            )
+        );
+
+        this.table.removeChild(this.tableBody);
+        this.tableBody = tableBody;
+        this.table.appendChild(this.tableBody);
+    }
+    
+    // addCalendar(dates) {
+    //     const table = document.createElement('table');
+    //     const tbody = document.createElement('tbody');
+    //     var tableDates = '';
+    //     // const tr = document.createElement('tr');
+    //     // const td = document.createElement('td');
+    //     tableDates += '<tr>';
+    //     for(let i = 0; i < 6; i++) {
+    //         tableDates += '<td>0</td>';
+    //         // tbody.appendChild(tr);
+
+    //         for(let j = 0; j < 7; j++) {
+    //             // tbody.innerHTML += "<td>0</td>";
+
+    //         }
+    //     }
+    //     tbody.innerHTML += '</tr>';
+
+    //     table.appendChild(tbody); 
+
+    //     console.log(dates);
+    //     // console.log(table);
+    //     this.calendar.appendChild(table);
+
+    // }
 
     addItem(todo) {
         const listItem = this.createListItem(todo);

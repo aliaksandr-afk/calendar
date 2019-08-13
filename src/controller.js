@@ -9,6 +9,12 @@ class Controller {
         view.on('remove', this.removeTodo.bind(this));
 
         view.show(model.items);
+        view.on('add', this.addCalendar.bind(this));
+    }
+
+    addCalendar() {
+        const calendar = this.model.getMonthData();
+        this.view.addCalendar(calendar);
     }
 
     addTodo(title) {
