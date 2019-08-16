@@ -47,63 +47,33 @@ class Model extends EventEmitter {
         }
     }
 
-    getMonthData(year, month) {
-        // const daysInMonth = Calendar.getDaysInMonth(year, month);
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
+//сделать три массива
 
-        // const monthStartsOn = Calendar.getDayOfWeek(year, month, 1);
+
+
+    getMonthData(year, month) {
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
         const monthStartsOn = new Date(year, month, 1).getDay();
-        // const daysInPreMonth = new Date(year, month, 0).getDate();
-        // var daysInPreMonth = getDayOfWeek(year, month, 0);
-        var daysInPreMonth = new Date(year, month, 0).getDate();
         const firstDayOfMonth = this.getDayOfWeek(year, month, 1);
 
         const data = [];
         let day = 1;
 
-
-
-
-        if (((daysInMonth + monthStartsOn) / this.DAYS_IN_WEEK) < 5) {
-            console.log('spec month');
-            // debugger
-            let counter = firstDayOfMonth;
-            counter += 7;
-            for (let j = 0; j < counter; j++) {
-                data[i][j] = counter--;
-                console.log(data);
-            }
-        }
-
-
-        // for (let i = 0; i < (daysInMonth + monthStartsOn) / this.DAYS_IN_WEEK; i++) {
-        for (let i = 1; i < this.ALL_WEEKS; i++) {
-
+        this.getPreData(year, month, data);
+        // console.log(typeof(data[0][0]));
+        for (let i = 0; i < this.ALL_WEEKS; i++) {
             data[i] = [];
 
             for (let j = 0; j < this.DAYS_IN_WEEK; j++) {
-                
-               
 
-
-
-
-
-
-
-
-
-                // if ((i === 0 && j < monthStartsOn)) {
-                    
-                    
-                //     //
-                // }
-
-
+                if(typeof(data[i][j]) !== 'number') {
+                    // console.log(data[i]);
+                }
 
                 // if ((i === 0 && j < monthStartsOn) || day > daysInMonth) {
                 //     // data[i][j] = undefined;
-
+                //     console.log(data[0][j]);
+                //     continue
                 // } else {
                 //     data[i][j] = {
                 //         year,
@@ -116,8 +86,27 @@ class Model extends EventEmitter {
                 // }
             }
         }
-        console.log(data);
         return data;
+    }
+
+    getPreData(year, month, data) {
+        var daysInPreMonth = new Date(year, month, 0).getDate();
+        const lastDayPre = this.getDayOfWeek(year, month - 1, daysInPreMonth);
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const monthStartsOn = new Date(year, month, 1).getDay();
+        data[0] = [];
+
+        if (((daysInMonth + monthStartsOn) / this.DAYS_IN_WEEK) < 5) {
+            for (let j = 0; j < this.DAYS_IN_WEEK; j++) {
+                data[0][j] = daysInPreMonth--;
+                // console.log(data[0][j]);
+            }
+        } else {
+                for (let j = lastDayPre; j >= 0; j--) {
+                    data[0][j] = daysInPreMonth--;
+                    // console.log(data[0][j]);
+                }
+        }
     }
 
     isToday(year, month, day) {
