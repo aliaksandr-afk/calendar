@@ -5,17 +5,10 @@ class Model extends EventEmitter {
         super();
 
         this.today = new Date();
-        // this.year = year;
-        // this.month = month;
-        // this.day = day;
-
         this.items = items;
-        // this.date = date;
-        // this.stateDate = stateDate; //массив с датами праздников
 
         this.DAYS_IN_WEEK = 7;
         this.ALL_WEEKS = 6;
-        // this.DAYS_IN_PRE_MONTH = new Date(year, month, 0).getDate();
         this.MONTH_NAMES = [
             'Январь',
             'Феварль',
@@ -30,9 +23,6 @@ class Model extends EventEmitter {
             'Ноябрь',
             'Декабрь',
         ];
-        // this.day = date.day;
-        // this.month = date.month; //выбранный день, месяц и год
-        // this.year = date.year;
     }
 
     getDayOfWeek(year, month, day) {
@@ -49,27 +39,27 @@ class Model extends EventEmitter {
 
     getMonthData(year, month) {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const monthStartsOn = new Date(year, month, 1).getDay();
-        const firstDayOfMonth = this.getDayOfWeek(year, month, 1);
 
-        const data = [[],[],[],[],[],[]];
+        const data = [[], [], [], [], [], []];
         let day = 1;
 
         this.getPreData(year, month, data);
         for (let i = 0; i < this.ALL_WEEKS; i++) {
 
             for (let j = 0; j < this.DAYS_IN_WEEK; j++) {
-                if((typeof(data[i][j]) !== 'number') && day <= daysInMonth) {
+                if ((typeof (data[i][j]) !== 'number') && day <= daysInMonth) {
                     data[i][j] = {
-                                year,
-                                month,
-                                day,
-                                isToday: this.isToday(year, month, day)
-                            };
-                day++;
+                        year,
+                        month,
+                        day,
+                        isToday: this.isToday(year, month, day)
+                    };
+                    day++;
                 }
             }
         }
+        this.getNextData(year, month, data);
+        console.log(data);
         return data;
     }
 
@@ -83,15 +73,28 @@ class Model extends EventEmitter {
         if (((daysInMonth + monthStartsOn) / this.DAYS_IN_WEEK) < 5) {
             for (let j = 0; j < this.DAYS_IN_WEEK; j++) {
                 data[0][j] = daysInPreMonth--;
-                // console.log(data[0][j]);
+                data[0].sort();
             }
         } else {
-                for (let j = lastDayPre; j >= 0; j--) {
-                    data[0][j] = daysInPreMonth--;
-                    // console.log(data[0][j]);
-                }
+            for (let j = lastDayPre; j >= 0; j--) {
+                data[0][j] = daysInPreMonth--;
+                data[0].sort();
+            }
         }
-        // return data;
+    }
+
+    getNextData(year, month, data) {
+        let day = 1;
+
+        for (let i = 0; i < this.ALL_WEEKS; i++) {
+
+            for (let j = 0; j < this.DAYS_IN_WEEK; j++) {
+                if (typeof (data[i][j]) !== 'number' && typeof (data[i][j]) !== 'object') {
+                    data[i][j] = day;
+                    day++;
+                }
+            }
+        }
     }
 
     isToday(year, month, day) {
@@ -101,70 +104,6 @@ class Model extends EventEmitter {
 
         return true;
     }
-    // //метод для сборки календаря
-    // if (date) {
-    //     // createCalendar(date); создаание календаря
-    //     //календарь - массив объектов
-    // } else {
-    //     const day = new Date().getDate();
-    //     const month = new Date().getMonth();
-    //     const year = new Date().getFullYear();
-
-    //     const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    //     const days = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
-    //     const months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-    //     var firstDay = new Date(year, month, 1).getDay();
-    //     const lastDay = new Date(year, month, daysInMonth).getDay();
-
-    //     var daysInPreMonth = new Date(year, month, 0).getDate();
-
-    //     const allDaysPre = [];
-    //     var firstDayNext = lastDay;
-    //     if (firstDay == 0) {
-    //         firstDay = 7;
-    //     }
-
-    //     for (let i = 0; i < firstDay - 1; i++) {
-    //         allDaysPre[i] = daysInPreMonth--;
-    //     }
-    //     allDaysPre.sort();
-
-    //     const allDaysThis = [];
-    //     for (let i = 1; i <= daysInMonth; i++) {
-    //         allDaysThis[i] = i;
-    //     }
-
-
-
-
-    // if((allDaysPre + allDaysThis) <= 35 ) {
-    //     let lastEl = allDaysNext.length;
-    //     let 
-    //     for(let i = allDaysNext[lastEl]; i < )
-    // }
-
-    //     const allDaysNext = [];
-    //     let daysWithoutNext = 42 - (allDaysPre + allDaysThis);
-
-    //     if (daysWithoutNext >= 7) {
-    //         let lastEl = allDaysNext.length;
-
-    //         for (let i = allDaysNext[lastEl]; i < daysWithoutNext; i++) {
-    //             allDaysNext[i] = i;
-    //         }
-    //     } else {
-    //         for (let i = 1; i <= 7 - (lastDay); i++) {
-    //             allDaysNext[i] = i;
-    //         }
-    //     }
-
-    //     var allDays = { allDaysPre, allDaysThis, allDaysNext };
-    //     return allDays;
-    //     // return allDaysPre, allDaysThis, allDaysNext; 
-    //     // return allDays = allDaysPre.concat(allDaysThis).concat(allDaysNext);
-    // }
-    // }
 
     getItem(id) {
         return this.items.find(item => item.id == id);
