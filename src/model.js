@@ -47,43 +47,27 @@ class Model extends EventEmitter {
         }
     }
 
-//сделать три массива
-
-
-
     getMonthData(year, month) {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const monthStartsOn = new Date(year, month, 1).getDay();
         const firstDayOfMonth = this.getDayOfWeek(year, month, 1);
 
-        const data = [];
+        const data = [[],[],[],[],[],[]];
         let day = 1;
 
         this.getPreData(year, month, data);
-        // console.log(typeof(data[0][0]));
         for (let i = 0; i < this.ALL_WEEKS; i++) {
-            data[i] = [];
 
             for (let j = 0; j < this.DAYS_IN_WEEK; j++) {
-
-                if(typeof(data[i][j]) !== 'number') {
-                    // console.log(data[i]);
+                if((typeof(data[i][j]) !== 'number') && day <= daysInMonth) {
+                    data[i][j] = {
+                                year,
+                                month,
+                                day,
+                                isToday: this.isToday(year, month, day)
+                            };
+                day++;
                 }
-
-                // if ((i === 0 && j < monthStartsOn) || day > daysInMonth) {
-                //     // data[i][j] = undefined;
-                //     console.log(data[0][j]);
-                //     continue
-                // } else {
-                //     data[i][j] = {
-                //         year,
-                //         month,
-                //         day,
-                //         isToday: this.isToday(year, month, day)
-                //     };
-
-                //     day++;
-                // }
             }
         }
         return data;
@@ -107,6 +91,7 @@ class Model extends EventEmitter {
                     // console.log(data[0][j]);
                 }
         }
+        // return data;
     }
 
     isToday(year, month, day) {
