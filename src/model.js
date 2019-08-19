@@ -45,15 +45,17 @@ class Model extends EventEmitter {
         this.getPreData(year, month, data);
         for (let i = 0; i < this.ALL_WEEKS; i++) {
             for (let j = 0; j < this.DAYS_IN_WEEK; j++) {
-                // if (('preMonth' in data[i][j]) && day <= daysInMonth) {
-                //     data[i][j] = {
-                //         year,
-                //         month,
-                //         day,
-                //         isToday: this.isToday(year, month, day)
-                //     };
-                //     day++;
-                // }
+                if (!(data[i][j]) && day <= daysInMonth) {
+                    data[i][j] = {
+                        year,
+                        month,
+                        day,
+                        isToday: this.isToday(year, month, day)
+                    };
+                    day++;
+                    // console.log(data[i][j]);
+                }
+                // console.log(data[i][j]);
             }
         }
         this.getNextData(year, month, data);
@@ -73,10 +75,11 @@ class Model extends EventEmitter {
                 data[0][j] = {
                     year,
                     month,
-                    preMonth: true,
+                    preMonth: daysInPreMonth,
                     isToday: false
                 };
                 daysInPreMonth--;
+                // console.log(data[0][j]);
                 // debugger
                 // data[0].sort();
             }
@@ -95,15 +98,16 @@ class Model extends EventEmitter {
     }
 
     getNextData(year, month, data) {
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
         let day = 1;
 
         for (let i = 0; i < this.ALL_WEEKS; i++) {
             for (let j = 0; j < this.DAYS_IN_WEEK; j++) {
-                if (typeof (data[i][j]) !== 'object') {
-                    data[0][j] = {
+                if (!(data[i][j])) {
+                    data[i][j] = {
                         year,
                         month,
-                        day,
+                        nextData: day,
                         isToday: false
                     };
                     // data[i][j] = day;
