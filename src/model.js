@@ -50,6 +50,7 @@ class Model extends EventEmitter {
                         year,
                         month,
                         day,
+                        thisMonth: true,
                         isToday: this.isToday(year, month, day)
                     };
                     day++;
