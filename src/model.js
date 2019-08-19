@@ -39,23 +39,21 @@ class Model extends EventEmitter {
 
     getMonthData(year, month) {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
-
         const data = [[], [], [], [], [], []];
         let day = 1;
 
         this.getPreData(year, month, data);
         for (let i = 0; i < this.ALL_WEEKS; i++) {
-
             for (let j = 0; j < this.DAYS_IN_WEEK; j++) {
-                if ((typeof (data[i][j]) !== 'number') && day <= daysInMonth) {
-                    data[i][j] = {
-                        year,
-                        month,
-                        day,
-                        isToday: this.isToday(year, month, day)
-                    };
-                    day++;
-                }
+                // if (('preMonth' in data[i][j]) && day <= daysInMonth) {
+                //     data[i][j] = {
+                //         year,
+                //         month,
+                //         day,
+                //         isToday: this.isToday(year, month, day)
+                //     };
+                //     day++;
+                // }
             }
         }
         this.getNextData(year, month, data);
@@ -72,13 +70,26 @@ class Model extends EventEmitter {
 
         if (((daysInMonth + monthStartsOn) / this.DAYS_IN_WEEK) < 5) {
             for (let j = 0; j < this.DAYS_IN_WEEK; j++) {
-                data[0][j] = daysInPreMonth--;
-                data[0].sort();
+                data[0][j] = {
+                    year,
+                    month,
+                    preMonth: true,
+                    isToday: false
+                };
+                daysInPreMonth--;
+                // debugger
+                // data[0].sort();
             }
         } else {
             for (let j = lastDayPre; j >= 0; j--) {
-                data[0][j] = daysInPreMonth--;
-                data[0].sort();
+                data[0][j] = {
+                    year,
+                    month,
+                    preMonth: daysInPreMonth,
+                    isToday: false
+                };
+                daysInPreMonth--;
+                // data[0].sort();
             }
         }
     }
@@ -87,10 +98,15 @@ class Model extends EventEmitter {
         let day = 1;
 
         for (let i = 0; i < this.ALL_WEEKS; i++) {
-
             for (let j = 0; j < this.DAYS_IN_WEEK; j++) {
-                if (typeof (data[i][j]) !== 'number' && typeof (data[i][j]) !== 'object') {
-                    data[i][j] = day;
+                if (typeof (data[i][j]) !== 'object') {
+                    data[0][j] = {
+                        year,
+                        month,
+                        day,
+                        isToday: false
+                    };
+                    // data[i][j] = day;
                     day++;
                 }
             }
