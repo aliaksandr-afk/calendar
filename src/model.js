@@ -59,7 +59,7 @@ class Model extends EventEmitter {
             }
         }
         this.getNextData(year, month, data);
-        console.log(data);
+        // console.log(data);
         return data;
     }
 

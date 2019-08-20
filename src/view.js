@@ -106,7 +106,7 @@ class View extends EventEmitter {
         // return this.monthSelect.value;
         // debugger
 
-        
+
         const tableBody = createElement('tbody', null);
         const tableHead = createElement('thead', null,
             ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(weekday =>
@@ -117,7 +117,7 @@ class View extends EventEmitter {
             tableHead,
             tableBody
         );
-        
+
         const prevMonthButton = createElement('button', {
             className: 'button',
             onclick: this.handlePrevMonthButtonClick.bind(this)
@@ -149,8 +149,8 @@ class View extends EventEmitter {
                 }, name)
             )
         );
-        
-        
+
+
 
         const element = createElement('div', { id: 'calendar' },
             createElement('header', null,
@@ -180,12 +180,12 @@ class View extends EventEmitter {
 
     // addEventCalendarListeners(tableBody) {
 
-        
+
 
     //     return tableBody;
     // }
 
-    createDates() {
+    createDates(month) {
         // const month = this.model.getMonthData(this.year, this.month);
         // console.log(this.model);
         const tableBody = createElement('tbody', null,
@@ -225,7 +225,7 @@ class View extends EventEmitter {
         // this.calendar.appendChild(this.tableBody);
 
 
-        // this.calendar.appendChild(tableBody);
+        this.calendar.appendChild(tableBody);
 
         // return this.addEventCalendarListeners(tableBody);
     }
@@ -247,7 +247,21 @@ class View extends EventEmitter {
         // this.update();
         // console.log(year);
         // console.log(this.month);
-        this.emit('prev', month, year);
+        this.emit('prev', { month, year });
+    }
+
+    handleNextMonthButtonClick() {
+        // console.log(this.monthSelect.value);
+        let month = this.month + 1;
+        let year = this.year;
+        if (month === 12) {
+            month = 0;
+            this.yearSelect.value = this.year + 1;
+        }
+        this.monthSelect.value = month;
+
+        this.emit('next', { month, year });
+        // this.update();
     }
 
     handleMonthSelectChange() {
@@ -265,26 +279,14 @@ class View extends EventEmitter {
 
 
 
-    handleNextMonthButtonClick() {
-        // console.log(this.monthSelect.value);
-        let month = this.month + 1;
 
-        if (month === 12) {
-            month = 0;
-            this.yearSelect.value = this.year + 1;
-        }
-
-        this.monthSelect.value = month;
-
-        this.update();
-    }
 
 
 
 
 
     addCalendar(dates) {
-        console.log(dates);
+        // console.log(dates);
     }
 
     //////////////////////////////////////////////////////////////////////////

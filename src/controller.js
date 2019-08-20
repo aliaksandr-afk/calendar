@@ -17,21 +17,28 @@ class Controller {
         view.on('edit', this.editTodo.bind(this));
         view.on('remove', this.removeTodo.bind(this));
         view.on('prev', this.prevMonth.bind(this));
+        view.on('next', this.nextMonth.bind(this));
 
         view.show(model.items);
-        view.on('add', this.addCalendar.bind(this));
+        // view.on('add', this.addCalendar.bind(this));
 
         view.addCalendarHeader(model.currentMonth, model.currentYear);
-        // view.addCalendarHeader();
+        this.addCalendar(model.currentMonth, model.currentYear);
         // view.update();
     }
 
-    prevMonth(month, year,) {
+    prevMonth({month, year}) {
         console.log(month, year);
+        this.addCalendar(month, year);
     }
 
-    addCalendar() {
-        const month = this.model.getMonthData(2019, 2);
+    nextMonth({month, year}) {
+        console.log(month, year);
+        this.addCalendar(month, year);
+    }
+
+    addCalendar(currentMonth, currentYear) {
+        const month = this.model.getMonthData(currentYear, currentMonth);
         this.view.createDates(month);
     }
 
