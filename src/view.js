@@ -15,10 +15,6 @@ class View extends EventEmitter {
 
         // console.log(this);
 
-        this.handleMonthSelectChange = this.handleMonthSelectChange.bind(this);
-        this.handleYearSelectChange = this.handleYearSelectChange.bind(this);
-        this.handlePrevMonthButtonClick = this.handlePrevMonthButtonClick.bind(this);
-        this.handleNextMonthButtonClick = this.handleNextMonthButtonClick.bind(this);
 
         this.form.addEventListener('submit', this.handleAdd.bind(this));
         this.MONTH_NAMES = [
@@ -48,47 +44,85 @@ class View extends EventEmitter {
         return Number(this.monthSelect.value);
     }
 
-    handlePrevMonthButtonClick() {
-        // debugger
-        let month = this.month - 1;
-        let year = this.year;
-        // console.log(this.monthSelect.value);
-        if (month === -1) {
-            month = 11;
-            this.yearSelect.value = this.year - 1;
-        }
-
-        this.monthSelect.value = month;
-        // this.update();
-        console.log(year);
-        this.emit('prev', month, year);
-    }
-
-    handleMonthSelectChange() {
-        this.update();
-    }
-
-    handleYearSelectChange() {
-        this.update();
-    }
+    ////////////////////////////////////////////////////////
 
     init(currentMonth, currentYear) {
         // debugger
         // console.log(this.monthSelect.value);
-        this.monthSelect = createElement('select', {
-            onchange: this.handleMonthSelectChange
-        },
-            this.MONTH_NAMES.map((name, index) =>
-                createElement('option', {
-                    value: index,
-                    selected: index === currentMonth
-                }, name)
-            )
-        );
+
+        // this.monthSelect = createElement('select', {
+        //     onchange: this.handleMonthSelectChange
+        // },
+        //     this.MONTH_NAMES.map((name, index) =>
+        //         createElement('option', {
+        //             value: index,
+        //             selected: index === currentMonth
+        //         }, name)
+        //     )
+        // );
         // console.log(this.monthSelect.value);
         // console.log(this.month);
-                // console.log(currentMonth, currentYear);
-        this.yearSelect = createElement('select', {
+        // console.log(currentMonth, currentYear);
+        // this.yearSelect = createElement('select', {
+        //     onchange: this.handleMonthSelectChange
+        // },
+        //     [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021].map(year =>
+        //         createElement('option', {
+        //             value: year,
+        //             selected: year === currentYear
+        //         }, year)
+        //     )
+        // );
+
+        // this.prevMonthButton = createElement('button', {
+        //     className: 'button',
+        //     onclick: this.handlePrevMonthButtonClick
+        // }, '<');
+        // console.log('click');
+
+        // this.nextMonthButton = createElement('button', {
+        //     className: 'button',
+        //     onclick: this.handleNextMonthButtonClick
+        // }, '>');
+
+        // this.tableHead = createElement('thead', null,
+        //     ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(weekday =>
+        //         createElement('th', null, weekday)
+        //     )
+        // );
+
+        // this.tableBody = createElement('tbody', null);
+
+        // this.table = createElement('table', { className: 'table is-bordered' },
+        //     this.tableHead,
+        //     this.tableBody
+        // );
+
+        // return currentMonth, currentYear;
+        // console.log(this.monthSelect.value);
+        // return this.monthSelect.value;
+        // debugger
+
+        
+        const tableBody = createElement('tbody', null);
+        const tableHead = createElement('thead', null,
+            ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(weekday =>
+                createElement('th', null, weekday)
+            )
+        );
+        const table = createElement('table', { className: 'table is-bordered' },
+            tableHead,
+            tableBody
+        );
+        const prevMonthButton = createElement('button', {
+            className: 'button',
+            onclick: this.handlePrevMonthButtonClick
+        }, '<');
+        const nextMonthButton = createElement('button', {
+            className: 'button',
+            onclick: this.handleNextMonthButtonClick
+        }, '>');
+        const yearSelect = createElement('select', {
             onchange: this.handleMonthSelectChange
         },
             [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021].map(year =>
@@ -98,72 +132,46 @@ class View extends EventEmitter {
                 }, year)
             )
         );
-
-        this.prevMonthButton = createElement('button', {
-            className: 'button',
-            onclick: this.handlePrevMonthButtonClick
-        }, '<');
-        // console.log('click');
-
-        this.nextMonthButton = createElement('button', {
-            className: 'button',
-            onclick: this.handleNextMonthButtonClick
-        }, '>');
-
-        this.tableHead = createElement('thead', null,
-            ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(weekday =>
-                createElement('th', null, weekday)
+        const monthSelect = createElement('select', {
+            onchange: this.handleMonthSelectChange
+        },
+            this.MONTH_NAMES.map((name, index) =>
+                createElement('option', {
+                    value: index,
+                    selected: index === currentMonth
+                }, name)
             )
         );
-
-        this.tableBody = createElement('tbody', null);
-
-        this.table = createElement('table', { className: 'table is-bordered' },
-            this.tableHead,
-            this.tableBody
-        );
-        // return currentMonth, currentYear;
-        // console.log(this.monthSelect.value);
-        // return this.monthSelect.value;
-        // debugger
-    }
-    // console.log(this.monthSelect.value);
-
-    
-
-    
-
-    handleNextMonthButtonClick() {
-        // console.log(this.monthSelect.value);
-        let month = this.month + 1;
-
-        if (month === 12) {
-            month = 0;
-            this.yearSelect.value = this.year + 1;
-        }
-
-        this.monthSelect.value = month;
-
-        this.update();
-    }
-
-    render() {
-        // console.log(this.monthSelect.value);
         const element = createElement('div', { id: 'calendar' },
             createElement('header', null,
-                this.prevMonthButton,
-                createElement('div', { className: 'select' }, this.monthSelect),
-                createElement('div', { className: 'select' }, this.yearSelect),
-                this.nextMonthButton
+                prevMonthButton,
+                createElement('div', { className: 'select' }, monthSelect),
+                createElement('div', { className: 'select' }, yearSelect),
+                nextMonthButton
             ),
-
-            this.table
+            table
         );
-
-        document.querySelector('#calendar').appendChild(element);
+        return element
     }
 
-    update() {
+    // render() {
+    //     // console.log(this.monthSelect.value);
+
+
+    //     document.querySelector('#calendar').appendChild(element);
+    // }
+
+    addEventCalendarListeners(tableBody) {
+
+        this.handleMonthSelectChange = this.handleMonthSelectChange.bind(this);
+        this.handleYearSelectChange = this.handleYearSelectChange.bind(this);
+        this.handlePrevMonthButtonClick = this.handlePrevMonthButtonClick.bind(this);
+        this.handleNextMonthButtonClick = this.handleNextMonthButtonClick.bind(this);
+
+        return tableBody;
+    }
+
+    createDates() {
         // const month = this.model.getMonthData(this.year, this.month);
         // console.log(this.model);
         const tableBody = createElement('tbody', null,
@@ -197,18 +205,76 @@ class View extends EventEmitter {
         );
 
         // this.calendar.removeChild(tableBody);
-        this.tableBody = tableBody;
-        this.calendar.appendChild(this.tableBody);
+
+
+        // this.tableBody = tableBody;
+        // this.calendar.appendChild(this.tableBody);
+
+
         // this.calendar.appendChild(tableBody);
+
+        // return this.addEventCalendarListeners(tableBody);
     }
+
+
+
+
+    handlePrevMonthButtonClick() {
+        // debugger
+        let month = this.month - 1;
+        let year = this.year;
+        // console.log(this.monthSelect.value);
+        if (month === -1) {
+            month = 11;
+            this.yearSelect.value = this.year - 1;
+        }
+
+        this.monthSelect.value = month;
+        // this.update();
+        console.log(year);
+        this.emit('prev', month, year);
+    }
+
+    handleMonthSelectChange() {
+        this.update();
+    }
+
+    handleYearSelectChange() {
+        this.update();
+    }
+
+
+    // console.log(this.monthSelect.value);
+
+
+
+
+
+    handleNextMonthButtonClick() {
+        // console.log(this.monthSelect.value);
+        let month = this.month + 1;
+
+        if (month === 12) {
+            month = 0;
+            this.yearSelect.value = this.year + 1;
+        }
+
+        this.monthSelect.value = month;
+
+        this.update();
+    }
+
+
+
+
 
     addCalendar(dates) {
         console.log(dates);
     }
 
-//////////////////////////////////////////////////////////////////////////
-//todo-list//
-//////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    /////////////////////////   todo-list   //////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
 
     createForm(elem) {
         //создание формы в elem
@@ -289,7 +355,7 @@ class View extends EventEmitter {
 
             this.list.appendChild(listItem);
         });
-    }    
+    }
 
     addItem(todo) {
         const listItem = this.createListItem(todo);

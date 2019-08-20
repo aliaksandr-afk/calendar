@@ -32,7 +32,7 @@ class Controller {
 
     addCalendar() {
         const month = this.model.getMonthData(2019, 2);
-        this.view.update();
+        this.view.createDates();
     }
 
     addTodo(title) {
