@@ -9,20 +9,19 @@ class Model extends EventEmitter {
 
         this.DAYS_IN_WEEK = 7;
         this.ALL_WEEKS = 6;
-        this.MONTH_NAMES = [
-            'Январь',
-            'Феварль',
-            'Март',
-            'Апрель',
-            'Май',
-            'Июнь',
-            'Июль',
-            'Август',
-            'Сентябрь',
-            'Октябрь',
-            'Ноябрь',
-            'Декабрь',
-        ];
+        
+    }
+
+    get currentYear() {
+        return this.today.getFullYear();
+    }
+
+    get currentMonth() {
+        return this.today.getMonth();
+    }
+
+    get currentDay() {
+        return this.today.getDate();
     }
 
     getDayOfWeek(year, month, day) {
@@ -72,7 +71,7 @@ class Model extends EventEmitter {
         data[0] = [];
 
         if (((daysInMonth + monthStartsOn) / this.DAYS_IN_WEEK) < 5) {
-            for (let j = 0; j < this.DAYS_IN_WEEK; j++) {
+            for (let j = 6; j > -1; j--) {
                 data[0][j] = {
                     year,
                     month,

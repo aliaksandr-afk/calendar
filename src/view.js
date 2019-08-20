@@ -10,7 +10,208 @@ class View extends EventEmitter {
 
         this.calendar = document.getElementById('calendar');
 
+        this.yearSelect = null;
+        this.monthSelect = null;
+
+        // console.log(this);
+
+        this.handleMonthSelectChange = this.handleMonthSelectChange.bind(this);
+        this.handleYearSelectChange = this.handleYearSelectChange.bind(this);
+        this.handlePrevMonthButtonClick = this.handlePrevMonthButtonClick.bind(this);
+        this.handleNextMonthButtonClick = this.handleNextMonthButtonClick.bind(this);
+
         this.form.addEventListener('submit', this.handleAdd.bind(this));
+        this.MONTH_NAMES = [
+            'Январь',
+            'Феварль',
+            'Март',
+            'Апрель',
+            'Май',
+            'Июнь',
+            'Июль',
+            'Август',
+            'Сентябрь',
+            'Октябрь',
+            'Ноябрь',
+            'Декабрь',
+        ];
+    }
+
+    get year() {
+        // console.log(this.yearSelect.value);
+        return Number(this.yearSelect.value);
+    }
+
+    get month() {
+        // console.log(this.monthSelect);
+        // debugger
+        return Number(this.monthSelect.value);
+    }
+
+    handlePrevMonthButtonClick() {
+        // debugger
+        let month = this.month - 1;
+        let year = this.year;
+        // console.log(this.monthSelect.value);
+        if (month === -1) {
+            month = 11;
+            this.yearSelect.value = this.year - 1;
+        }
+
+        this.monthSelect.value = month;
+        // this.update();
+        console.log(year);
+        this.emit('prev', month, year);
+    }
+
+    handleMonthSelectChange() {
+        this.update();
+    }
+
+    handleYearSelectChange() {
+        this.update();
+    }
+
+    init(currentMonth, currentYear) {
+        // debugger
+        // console.log(this.monthSelect.value);
+        this.monthSelect = createElement('select', {
+            onchange: this.handleMonthSelectChange
+        },
+            this.MONTH_NAMES.map((name, index) =>
+                createElement('option', {
+                    value: index,
+                    selected: index === currentMonth
+                }, name)
+            )
+        );
+        // console.log(this.monthSelect.value);
+        // console.log(this.month);
+                // console.log(currentMonth, currentYear);
+        this.yearSelect = createElement('select', {
+            onchange: this.handleMonthSelectChange
+        },
+            [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021].map(year =>
+                createElement('option', {
+                    value: year,
+                    selected: year === currentYear
+                }, year)
+            )
+        );
+
+        this.prevMonthButton = createElement('button', {
+            className: 'button',
+            onclick: this.handlePrevMonthButtonClick
+        }, '<');
+        // console.log('click');
+
+        this.nextMonthButton = createElement('button', {
+            className: 'button',
+            onclick: this.handleNextMonthButtonClick
+        }, '>');
+
+        this.tableHead = createElement('thead', null,
+            ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(weekday =>
+                createElement('th', null, weekday)
+            )
+        );
+
+        this.tableBody = createElement('tbody', null);
+
+        this.table = createElement('table', { className: 'table is-bordered' },
+            this.tableHead,
+            this.tableBody
+        );
+        // return currentMonth, currentYear;
+        // console.log(this.monthSelect.value);
+        // return this.monthSelect.value;
+        // debugger
+    }
+    // console.log(this.monthSelect.value);
+
+    
+
+    
+
+    handleNextMonthButtonClick() {
+        // console.log(this.monthSelect.value);
+        let month = this.month + 1;
+
+        if (month === 12) {
+            month = 0;
+            this.yearSelect.value = this.year + 1;
+        }
+
+        this.monthSelect.value = month;
+
+        this.update();
+    }
+
+    render() {
+        // console.log(this.monthSelect.value);
+        const element = createElement('div', { id: 'calendar' },
+            createElement('header', null,
+                this.prevMonthButton,
+                createElement('div', { className: 'select' }, this.monthSelect),
+                createElement('div', { className: 'select' }, this.yearSelect),
+                this.nextMonthButton
+            ),
+
+            this.table
+        );
+
+        document.querySelector('#calendar').appendChild(element);
+    }
+
+    update() {
+        // const month = this.model.getMonthData(this.year, this.month);
+        // console.log(this.model);
+        const tableBody = createElement('tbody', null,
+            month.map(week =>
+                createElement('tr', null,
+                    week.map(date => {
+                        if (date && date.thisMonth) {
+                            let obj = createElement('td', {
+                                className: date && date.isToday ? 'has-background-primary has-text-white' : undefined
+                                // onclick: date ? () => this.onDateSelect(date) : undefined
+                            }, date ? date.day : '');
+                            return obj;
+                        }
+                        else if (date && date.nextData) {
+                            let obj = createElement('td', {
+                                className: 'prev-month'
+                                // onclick: date ? () => this.onDateSelect(date) : undefined
+                            }, date ? date.nextData : '');
+                            return obj;
+                        } else if (date && date.preMonth) {
+                            let obj = createElement('td', {
+                                className: 'prev-month'
+                                // onclick: date ? () => this.onDateSelect(date) : undefined
+                            }, date ? date.preMonth : '');
+                            return obj;
+                        }
+                    }
+                    )
+                )
+            )
+        );
+
+        // this.calendar.removeChild(tableBody);
+        this.tableBody = tableBody;
+        this.calendar.appendChild(this.tableBody);
+        // this.calendar.appendChild(tableBody);
+    }
+
+    addCalendar(dates) {
+        console.log(dates);
+    }
+
+//////////////////////////////////////////////////////////////////////////
+//todo-list//
+//////////////////////////////////////////////////////////////////////////
+
+    createForm(elem) {
+        //создание формы в elem
     }
 
     createListItem(todo) {
@@ -88,152 +289,7 @@ class View extends EventEmitter {
 
             this.list.appendChild(listItem);
         });
-    }
-
-    // create(date) {
-    //     if (date && date.isToday) {
-    //             createElement('td', {
-    //                 className: date && date.isToday ? 'has-background-primary has-text-white' : undefined
-    //                 // onclick: date ? () => this.onDateSelect(date) : undefined
-    //             }, date ? date.day : '')
-    //         }
-    //         else if (date && date.nextData) {
-    //             createElement('td', {
-    //                 className: 'prev-month'
-    //                 // onclick: date ? () => this.onDateSelect(date) : undefined
-    //             }, date ? date.nextData : '')
-    //         } else if (date && date.preMonth) {
-    //             createElement('td', {
-    //                 className: 'prev-month'
-    //                 // onclick: date ? () => this.onDateSelect(date) : undefined
-    //             }, date ? date.preMonth : '')
-    //         }
-    // }
-
-
-    update(month) {
-        const tableBody = createElement('tbody', null,
-            month.map(week =>
-                createElement('tr', null,
-                    week.map(date => {
-                        if (date && date.thisMonth) {
-                            let obj = createElement('td', {
-                                className: date && date.isToday ? 'has-background-primary has-text-white' : undefined
-                                // onclick: date ? () => this.onDateSelect(date) : undefined
-                            }, date ? date.day : '');
-                            return obj;
-                            
-                        }
-                        else if (date && date.nextData) {
-                            let obj = createElement('td', {
-                                className: 'prev-month'
-                                // onclick: date ? () => this.onDateSelect(date) : undefined
-                            }, date ? date.nextData : '');
-                            return obj;
-                        } else if (date && date.preMonth) {
-                            let obj = createElement('td', {
-                                className: 'prev-month'
-                                // onclick: date ? () => this.onDateSelect(date) : undefined
-                            }, date ? date.preMonth : '');
-                            return obj;
-                        }
-                    }
-                        // createElement('td', {
-                        //     className: date && date.isToday ? 'has-background-primary has-text-white' : "this-month",
-                        //     // onclick: date ? () => this.onDateSelect(date) : undefined
-                        // }, date ? date.day : '')
-                        // function (date) {
-                        // console.log(date);
-                        // createElement('td', {
-                        //     className: date && date.isToday ? 'has-background-primary has-text-white' : "this-month",
-                        //     // onclick: date ? () => this.onDateSelect(date) : undefined
-                        // }, date ? date.day : '')
-                        // return date;
-                        // }
-                        // date => {
-                        // if (date.nextData) {
-                        //     console.log(date);
-                        // debugger
-                        // createElement('td', {
-                        //     className: "next-month"
-                        //     // onclick: date ? () => this.onDateSelect(date) : undefined
-                        // }, date ? date.nextMonth : '')
-                        //     createElement('td', {
-                        //     className: date && date.isToday ? 'has-background-primary has-text-white' : "this-month",
-                        //     // onclick: date ? () => this.onDateSelect(date) : undefined
-                        // }, date ? date.day : '')
-                        //     }
-                        // }
-                        // {
-                        // debugger
-                        // if (date && date.isToday) {
-                        //     createElement('td', {
-                        //         className: date && date.isToday ? 'has-background-primary has-text-white' : undefined
-                        //         // onclick: date ? () => this.onDateSelect(date) : undefined
-                        //     }, date ? date.day : '')
-                        // }
-                        // else if (date && date.nextData) {
-                        //     createElement('td', {
-                        //         className: 'prev-month'
-                        //         // onclick: date ? () => this.onDateSelect(date) : undefined
-                        //     }, date ? date.nextData : '')
-                        // } else if (date && date.preMonth) {
-                        //     createElement('td', {
-                        //         className: 'prev-month'
-                        //         // onclick: date ? () => this.onDateSelect(date) : undefined
-                        //     }, date ? date.preMonth : '')
-                        // }
-
-                        // createElement('td', {
-                        //     className: date && date.isToday ? 'has-background-primary has-text-white' : "this-month",
-                        //     // onclick: date ? () => this.onDateSelect(date) : undefined
-                        // }, date ? date.day : '')
-                        // }
-                    )
-                )
-            )
-        );
-
-
-
-
-
-
-        // this.calendar.removeChild(tableBody);
-        this.tableBody = tableBody;
-        this.calendar.appendChild(this.tableBody);
-        // this.calendar.appendChild(tableBody);
-    }
-
-    addCalendar(dates) {
-        console.log(dates);
-    }
-
-    // addCalendar(dates) {
-    //     const table = document.createElement('table');
-    //     const tbody = document.createElement('tbody');
-    //     var tableDates = '';
-    //     // const tr = document.createElement('tr');
-    //     // const td = document.createElement('td');
-    //     tableDates += '<tr>';
-    //     for(let i = 0; i < 6; i++) {
-    //         tableDates += '<td>0</td>';
-    //         // tbody.appendChild(tr);
-
-    //         for(let j = 0; j < 7; j++) {
-    //             // tbody.innerHTML += "<td>0</td>";
-
-    //         }
-    //     }
-    //     tbody.innerHTML += '</tr>';
-
-    //     table.appendChild(tbody); 
-
-    //     console.log(dates);
-    //     // console.log(table);
-    //     this.calendar.appendChild(table);
-
-    // }
+    }    
 
     addItem(todo) {
         const listItem = this.createListItem(todo);
