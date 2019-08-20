@@ -18,6 +18,8 @@ class Controller {
         view.on('remove', this.removeTodo.bind(this));
         view.on('prev', this.prevMonth.bind(this));
         view.on('next', this.nextMonth.bind(this));
+        view.on('changeMonth', this.changeMonth.bind(this));
+        view.on('changeYear', this.changeYear.bind(this));
 
         view.show(model.items);
         // view.on('add', this.addCalendar.bind(this));
@@ -35,6 +37,16 @@ class Controller {
     nextMonth({month, year}) {
         console.log(month, year);
         this.addCalendar(month, year);
+    }
+
+    changeMonth(month) {
+        console.log(month);
+        this.addCalendar(month, this.model.currentYear);
+    }
+
+    changeYear(year) {
+        console.log(year);
+        this.addCalendar(this.model.currentMonth, year);
     }
 
     addCalendar(currentMonth, currentYear) {

@@ -13,12 +13,6 @@ class View extends EventEmitter {
         this.yearSelect = null;
         this.monthSelect = null;
 
-        // console.log(this);
-        // this.handleMonthSelectChange = this.handleMonthSelectChange.bind(this);
-        // this.handleYearSelectChange = this.handleYearSelectChange.bind(this);
-        // this.handlePrevMonthButtonClick = this.handlePrevMonthButtonClick.bind(this);
-        // this.handleNextMonthButtonClick = this.handleNextMonthButtonClick.bind(this);
-
         this.form.addEventListener('submit', this.handleAdd.bind(this));
         this.MONTH_NAMES = [
             'Январь',
@@ -50,63 +44,7 @@ class View extends EventEmitter {
     ////////////////////////////////////////////////////////
 
     init(currentMonth, currentYear) {
-        // debugger
-        // console.log(this.monthSelect.value);
-
-        // this.monthSelect = createElement('select', {
-        //     onchange: this.handleMonthSelectChange
-        // },
-        //     this.MONTH_NAMES.map((name, index) =>
-        //         createElement('option', {
-        //             value: index,
-        //             selected: index === currentMonth
-        //         }, name)
-        //     )
-        // );
-        // console.log(this.monthSelect.value);
-        // console.log(this.month);
-        // console.log(currentMonth, currentYear);
-        // this.yearSelect = createElement('select', {
-        //     onchange: this.handleMonthSelectChange
-        // },
-        //     [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021].map(year =>
-        //         createElement('option', {
-        //             value: year,
-        //             selected: year === currentYear
-        //         }, year)
-        //     )
-        // );
-
-        // this.prevMonthButton = createElement('button', {
-        //     className: 'button',
-        //     onclick: this.handlePrevMonthButtonClick
-        // }, '<');
-        // console.log('click');
-
-        // this.nextMonthButton = createElement('button', {
-        //     className: 'button',
-        //     onclick: this.handleNextMonthButtonClick
-        // }, '>');
-
-        // this.tableHead = createElement('thead', null,
-        //     ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(weekday =>
-        //         createElement('th', null, weekday)
-        //     )
-        // );
-
-        // this.tableBody = createElement('tbody', null);
-
-        // this.table = createElement('table', { className: 'table is-bordered' },
-        //     this.tableHead,
-        //     this.tableBody
-        // );
-
-        // return currentMonth, currentYear;
-        // console.log(this.monthSelect.value);
-        // return this.monthSelect.value;
-        // debugger
-
-
+        
         const tableBody = createElement('tbody', null);
         const tableHead = createElement('thead', null,
             ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(weekday =>
@@ -265,11 +203,13 @@ class View extends EventEmitter {
     }
 
     handleMonthSelectChange() {
-        this.update();
+        let month = this.monthSelect.value;
+        this.emit('changeMonth', month);
     }
 
     handleYearSelectChange() {
-        this.update();
+        let year = this.yearSelect.value;
+        this.emit('changeYear', year);
     }
 
 
