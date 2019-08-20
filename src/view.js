@@ -14,7 +14,10 @@ class View extends EventEmitter {
         this.monthSelect = null;
 
         // console.log(this);
-
+        // this.handleMonthSelectChange = this.handleMonthSelectChange.bind(this);
+        // this.handleYearSelectChange = this.handleYearSelectChange.bind(this);
+        // this.handlePrevMonthButtonClick = this.handlePrevMonthButtonClick.bind(this);
+        // this.handleNextMonthButtonClick = this.handleNextMonthButtonClick.bind(this);
 
         this.form.addEventListener('submit', this.handleAdd.bind(this));
         this.MONTH_NAMES = [
@@ -114,16 +117,19 @@ class View extends EventEmitter {
             tableHead,
             tableBody
         );
+        
         const prevMonthButton = createElement('button', {
             className: 'button',
-            onclick: this.handlePrevMonthButtonClick
+            onclick: this.handlePrevMonthButtonClick.bind(this)
         }, '<');
+
         const nextMonthButton = createElement('button', {
             className: 'button',
-            onclick: this.handleNextMonthButtonClick
+            onclick: this.handleNextMonthButtonClick.bind(this)
         }, '>');
-        const yearSelect = createElement('select', {
-            onchange: this.handleMonthSelectChange
+
+        this.yearSelect = createElement('select', {
+            onchange: this.handleMonthSelectChange.bind(this)
         },
             [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021].map(year =>
                 createElement('option', {
@@ -132,8 +138,9 @@ class View extends EventEmitter {
                 }, year)
             )
         );
-        const monthSelect = createElement('select', {
-            onchange: this.handleMonthSelectChange
+
+        this.monthSelect = createElement('select', {
+            onchange: this.handleMonthSelectChange.bind(this)
         },
             this.MONTH_NAMES.map((name, index) =>
                 createElement('option', {
@@ -142,16 +149,26 @@ class View extends EventEmitter {
                 }, name)
             )
         );
+        
+        
+
         const element = createElement('div', { id: 'calendar' },
             createElement('header', null,
                 prevMonthButton,
-                createElement('div', { className: 'select' }, monthSelect),
-                createElement('div', { className: 'select' }, yearSelect),
+                createElement('div', { className: 'select' }, this.monthSelect),
+                createElement('div', { className: 'select' }, this.yearSelect),
                 nextMonthButton
             ),
             table
         );
-        return element
+        return element;
+    }
+
+    addCalendarHeader(currentMonth, currentYear) {
+        const calendarHeader = this.init(currentMonth, currentYear);
+
+        // this.list.appendChild(listItem);
+        document.querySelector('#calendar').appendChild(calendarHeader);
     }
 
     // render() {
@@ -161,15 +178,12 @@ class View extends EventEmitter {
     //     document.querySelector('#calendar').appendChild(element);
     // }
 
-    addEventCalendarListeners(tableBody) {
+    // addEventCalendarListeners(tableBody) {
 
-        this.handleMonthSelectChange = this.handleMonthSelectChange.bind(this);
-        this.handleYearSelectChange = this.handleYearSelectChange.bind(this);
-        this.handlePrevMonthButtonClick = this.handlePrevMonthButtonClick.bind(this);
-        this.handleNextMonthButtonClick = this.handleNextMonthButtonClick.bind(this);
+        
 
-        return tableBody;
-    }
+    //     return tableBody;
+    // }
 
     createDates() {
         // const month = this.model.getMonthData(this.year, this.month);
@@ -231,7 +245,8 @@ class View extends EventEmitter {
 
         this.monthSelect.value = month;
         // this.update();
-        console.log(year);
+        // console.log(year);
+        // console.log(this.month);
         this.emit('prev', month, year);
     }
 

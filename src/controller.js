@@ -21,18 +21,18 @@ class Controller {
         view.show(model.items);
         view.on('add', this.addCalendar.bind(this));
 
-        view.init(model.currentMonth, model.currentYear);
-        view.render();
+        view.addCalendarHeader(model.currentMonth, model.currentYear);
+        // view.addCalendarHeader();
         // view.update();
     }
 
-    prevMonth() {
-        
+    prevMonth(month, year,) {
+        console.log(month, year);
     }
 
     addCalendar() {
         const month = this.model.getMonthData(2019, 2);
-        this.view.createDates();
+        this.view.createDates(month);
     }
 
     addTodo(title) {
