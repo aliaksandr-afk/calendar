@@ -4,19 +4,24 @@ class View extends EventEmitter {
     constructor() {
         super();
 
-        this.form = document.getElementById('todo-form');
-        this.input = document.getElementById('add-input');
-        this.list = document.getElementById('todo-list');
+        // this.form = document.getElementById('todo-form');
+        // this.input = document.getElementById('add-input');
+        // this.list = document.getElementById('todo-list');
 
         this.calendar = document.getElementById('calendar');
+
         this.table = null;
         this.tableHead = null;
         this.tableBody = null;
+        this.calendarInfo = createElement('div', { className: 'calendarInfo' });
 
         this.yearSelect = null;
         this.monthSelect = null;
+        this.input = null;
+        this.list = null;
+        this.date = null;
 
-        this.form.addEventListener('submit', this.handleAdd.bind(this));
+        // this.form.addEventListener('submit', this.handleAddNote.bind(this));
         this.MONTH_NAMES = [
             'Январь',
             'Феварль',
@@ -34,27 +39,24 @@ class View extends EventEmitter {
     }
 
     get year() {
-        // console.log(this.yearSelect.value);
         return Number(this.yearSelect.value);
     }
 
     get month() {
-        // console.log(this.monthSelect);
-        // debugger
         return Number(this.monthSelect.value);
     }
 
     ////////////////////////////////////////////////////
 
-    init(currentMonth, currentYear) {
-        
+    createCalendar(currentMonth, currentYear) {
         this.tableBody = createElement('tbody', null);
+
         this.tableHead = createElement('thead', null,
             ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(weekday =>
                 createElement('th', null, weekday)
             )
         );
-        this.table = createElement('table', { className: 'table is-bordered' },
+        this.table = createElement('table', { className: 'calendar-body' },
             this.tableHead,
             this.tableBody
         );
@@ -91,26 +93,33 @@ class View extends EventEmitter {
             )
         );
 
-
-
-        const element = createElement('div', { id: 'calendar' },
-            createElement('header', null,
+        const calendarWrap = createElement('div', { id: 'calendar-wrap' },
+            createElement('div', { className: 'calendar-head' },
                 prevMonthButton,
                 createElement('div', { className: 'select' }, this.monthSelect),
                 createElement('div', { className: 'select' }, this.yearSelect),
                 nextMonthButton
             ),
-            this.table
+            this.table,
         );
-        return element;
+        return calendarWrap;
     }
 
-    addCalendarHeader(currentMonth, currentYear) {
-        const calendarHeader = this.init(currentMonth, currentYear);
+    addCalendarInfo() {
+        // info, weather
+        //
+    }
 
-        // this.list.appendChild(listItem);
-        console.log('fdsf');
-        document.querySelector('#calendar').appendChild(calendarHeader);
+    // add
+
+    addCalendarHeader(currentMonth, currentYear) {
+        const calendarWrap = this.createCalendar(currentMonth, currentYear);
+        // const info = this.createCalendarInfo();
+
+        this.calendar.appendChild(calendarWrap);
+        this.calendar.appendChild(this.calendarInfo);
+
+        // this.calendarInfo.appendChild(info);
     }
 
     createDates(month) {
@@ -120,21 +129,21 @@ class View extends EventEmitter {
                     week.map(date => {
                         if (date && date.thisMonth) {
                             let obj = createElement('td', {
-                                className: date && date.isToday ? 'has-background-primary has-text-white' : undefined
-                                // onclick: date ? () => this.onDateSelect(date) : undefined
+                                className: date && date.isToday ? 'has-background-primary has-text-white' : 'this-month',
+                                onclick: (event) => this.handleAddNote(event)
                             }, date ? date.day : '');
                             return obj;
                         }
                         else if (date && date.nextData) {
                             let obj = createElement('td', {
-                                className: 'prev-month'
-                                // onclick: date ? () => this.onDateSelect(date) : undefined
+                                className: 'next-month',
+                                onclick: () => this.handleNextMonthButtonClick()
                             }, date ? date.nextData : '');
                             return obj;
                         } else if (date && date.preMonth) {
                             let obj = createElement('td', {
-                                className: 'prev-month'
-                                // onclick: date ? () => this.onDateSelect(date) : undefined
+                                className: 'pre-month',
+                                onclick: () => this.handlePrevMonthButtonClick()
                             }, date ? date.preMonth : '');
                             return obj;
                         }
@@ -148,9 +157,6 @@ class View extends EventEmitter {
         this.tableBody = tableBody;
         this.table.appendChild(this.tableBody);
     }
-
-
-
 
     handlePrevMonthButtonClick() {
         // debugger
@@ -170,7 +176,6 @@ class View extends EventEmitter {
     }
 
     handleNextMonthButtonClick() {
-        // console.log(this.monthSelect.value);
         let month = this.month + 1;
         let year = this.year;
         if (month === 12) {
@@ -180,7 +185,6 @@ class View extends EventEmitter {
         this.monthSelect.value = month;
 
         this.emit('next', { month, year });
-        // this.update();
     }
 
     handleMonthSelectChange() {
@@ -191,34 +195,15 @@ class View extends EventEmitter {
     handleYearSelectChange() {
         let year = this.yearSelect.value;
         let month = this.monthSelect.value;
-        console.log(year);
-        // console.log(month);
         this.emit('changeYear', { month, year });
     }
-
-
-    // console.log(this.monthSelect.value);
-
-
-
-
-
-
-
-
-
-
-
-    // addCalendar(dates) {
-    //     // console.log(dates);
-    // }
 
     //////////////////////////////////////////////////////////////////////////
     /////////////////////////   todo-list   //////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
-    createForm(elem) {
-        //создание формы в elem
+    createNotes(elem) {
+
     }
 
     createListItem(todo) {
@@ -248,14 +233,36 @@ class View extends EventEmitter {
         return this.list.querySelector(`[data-id="${id}"]`);
     }
 
-    handleAdd(event) {
-        event.preventDefault();
+    handleAddNote(event) {
+        let target = event.target;
+        this.date = target.textContent;
+        let date = this.date;
+        let year = this.year;
+        let month = this.month;
+        const dateInfo = createElement('div', { className: 'date-info' },
+            createElement('ul', { className: 'todo-list' }),
+            createElement('form', {
+                className: 'todo-form',
+                onsubmit: (event) => this.handleAdd(event, { year, month, date })
+            },
+                createElement('input', { className: 'add-input' }),
+                createElement('button', { className: 'add-button', type: 'submit' }, '+'))
+        );
+        this.calendarInfo.appendChild(dateInfo);
+        this.list = document.querySelector('.todo-list');
+        //////вывод данных
+        // this.show({year, month, date});
+        this.emit('check', date);
+    }
 
+    handleAdd(event, { year, month, date }) {
+        event.preventDefault();
+        this.input = document.querySelector('.add-input');
         if (!this.input.value) return alert('Необходимо ввести название задачи.');
 
-        const value = this.input.value;
-
-        this.emit('add', value);
+        const title = this.input.value;
+        // console.log(value);
+        this.emit('add', { title, year, month, date });
     }
 
     handleToggle({ target }) {
@@ -292,9 +299,12 @@ class View extends EventEmitter {
 
     show(todos) {
         todos.forEach(todo => {
-            const listItem = this.createListItem(todo);
-
-            this.list.appendChild(listItem);
+            // console.log(todo.id);
+            if (todo.id == String(this.date) + this.month + this.year) {
+                console.log(String(this.year) + this.month + this.date);
+                const listItem = this.createListItem(todo);
+                this.list.appendChild(listItem);
+            }
         });
     }
 

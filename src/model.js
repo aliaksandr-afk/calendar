@@ -53,13 +53,10 @@ class Model extends EventEmitter {
                         isToday: this.isToday(year, month, day)
                     };
                     day++;
-                    // console.log(data[i][j]);
                 }
-                // console.log(data[i][j]);
             }
         }
         this.getNextData(year, month, data);
-        // console.log(data);
         return data;
     }
 
@@ -79,9 +76,6 @@ class Model extends EventEmitter {
                     isToday: false
                 };
                 daysInPreMonth--;
-                // console.log(data[0][j]);
-                // debugger
-                // data[0].sort();
             }
         } else {
             for (let j = lastDayPre; j >= 0; j--) {
@@ -92,13 +86,11 @@ class Model extends EventEmitter {
                     isToday: false
                 };
                 daysInPreMonth--;
-                // data[0].sort();
             }
         }
     }
 
     getNextData(year, month, data) {
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
         let day = 1;
 
         for (let i = 0; i < this.ALL_WEEKS; i++) {
@@ -110,7 +102,6 @@ class Model extends EventEmitter {
                         nextData: day,
                         isToday: false
                     };
-                    // data[i][j] = day;
                     day++;
                 }
             }

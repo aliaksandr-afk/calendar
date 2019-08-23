@@ -2,10 +2,6 @@ class Controller {
     constructor(model, view) {
         this.model = model;
         this.view = view;
-        // debugger
-        // this.yearSelect = null;
-        // this.monthSelect = null;
-        // console.log(view.monthSelect.value);
         this.prevMonthButton = null;
         this.nextMonthButton = null;
         this.table = null;
@@ -20,22 +16,32 @@ class Controller {
         view.on('next', this.nextMonth.bind(this));
         view.on('changeMonth', this.changeMonth.bind(this));
         view.on('changeYear', this.changeYear.bind(this));
-
-        view.show(model.items);
-        // view.on('add', this.addCalendar.bind(this));
+        view.on('check', this.showInfo.bind(this));
+        // view.on('check', console.log('f'));
 
         view.addCalendarHeader(model.currentMonth, model.currentYear);
         this.addCalendar(model.currentMonth, model.currentYear);
-        // view.update();
+
+        // view.show(model.items);
+    }
+
+    showInfo() {
+        this.view.show(this.model.items);
+    //     // let items = this.model.items;
+    //     // console.log(items);
+    //     // items.forEach(item => {
+    //     //     // if()
+    //     //     const listItem = this.createListItem(todo);
+    //     //     this.list.appendChild(listItem);
+    //     });
+    //     // this.view.show(this.model.items); проверка
     }
 
     prevMonth({month, year}) {
-        console.log(month, year);
         this.addCalendar(month, year);
     }
 
     nextMonth({month, year}) {
-        console.log(month, year);
         this.addCalendar(month, year);
     }
 
@@ -52,14 +58,17 @@ class Controller {
         this.view.createDates(month);
     }
 
-    addTodo(title) {
+    addTodo({title, year, month, date}) {
+        // console.log(value);
         const item = this.model.addItem({
-            id: Date.now(),
+            id: date + month + year,
             title,
             completed: false
         });
 
         this.view.addItem(item);
+        // debugger
+        // this.view.show(this.model.items);
     }
 
     toggleTodo({ id, completed }) {
