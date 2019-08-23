@@ -301,7 +301,6 @@ class View extends EventEmitter {
         todos.forEach(todo => {
             // console.log(todo.id);
             if (todo.id == String(this.date) + this.month + this.year) {
-                console.log(String(this.year) + this.month + this.date);
                 const listItem = this.createListItem(todo);
                 this.list.appendChild(listItem);
             }
