@@ -70,7 +70,7 @@ class Model extends EventEmitter {
         const monthStartsOn = new Date(year, month, 1).getDay();
         data[0] = [];
 
-        if (((daysInMonth + monthStartsOn) / this.DAYS_IN_WEEK) < 5) {
+        if (((daysInMonth + monthStartsOn) / this.DAYS_IN_WEEK) < 1) {
             for (let j = 6; j > -1; j--) {
                 data[0][j] = {
                     year,

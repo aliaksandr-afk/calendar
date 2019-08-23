@@ -40,13 +40,11 @@ class Controller {
     }
 
     changeMonth(month) {
-        console.log(month);
         this.addCalendar(month, this.model.currentYear);
     }
 
-    changeYear(year) {
-        console.log(year);
-        this.addCalendar(this.model.currentMonth, year);
+    changeYear({month, year}) {
+        this.addCalendar(month, year);
     }
 
     addCalendar(currentMonth, currentYear) {
