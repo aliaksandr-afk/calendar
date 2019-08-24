@@ -17,24 +17,13 @@ class Controller {
         view.on('changeMonth', this.changeMonth.bind(this));
         view.on('changeYear', this.changeYear.bind(this));
         view.on('check', this.showInfo.bind(this));
-        // view.on('check', console.log('f'));
 
         view.addCalendarHeader(model.currentMonth, model.currentYear);
         this.addCalendar(model.currentMonth, model.currentYear);
-
-        // view.show(model.items);
     }
 
     showInfo() {
         this.view.show(this.model.items);
-    //     // let items = this.model.items;
-    //     // console.log(items);
-    //     // items.forEach(item => {
-    //     //     // if()
-    //     //     const listItem = this.createListItem(todo);
-    //     //     this.list.appendChild(listItem);
-    //     });
-    //     // this.view.show(this.model.items); проверка
     }
 
     prevMonth({month, year}) {
@@ -59,7 +48,6 @@ class Controller {
     }
 
     addTodo({title, year, month, date}) {
-        // console.log(value);
         const item = this.model.addItem({
             id: date + month + year,
             title,
@@ -67,8 +55,6 @@ class Controller {
         });
 
         this.view.addItem(item);
-        // debugger
-        // this.view.show(this.model.items);
     }
 
     toggleTodo({ id, completed }) {
