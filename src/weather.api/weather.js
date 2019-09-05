@@ -1,38 +1,44 @@
+
+
+function getWeather(date) {
 let long;
 let lat;
 let WEATHER_KEY = "83b6660876df25f1d7d419c755b6846b";
-// let temperatureDescription = document.querySelector('.temperature-description');
-let temperatureDegree = document.querySelector('.temperature-degree');
-// let locationTimezone = document.querySelector('.location-timezone');
-let temperatureSection = document.querySelector('.temperature');
-const temperatureSpan = document.querySelector('.temperature span')
+let temperatureSection = document.querySelector('.degree-section');
+console.log(temperatureSection);
+let temperatureDegree = document.querySelector('.temperature-section');
+console.log(temperatureDegree);
 
-function getWeather (date) {
+const temperatureSpan = document.querySelector('.degree-section span')
+console.log(temperatureSpan);
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
             long = position.coords.longitude;
             lat = position.coords.latitude;
-    
+
             const proxy = 'https://cors-anywhere.herokuapp.com/';
             const api = `${proxy}https://api.darksky.net/forecast/${WEATHER_KEY}/${lat},${long},255657600?exclude=minutely,hourly,lang=ru,units=auto,alerts,flags&units=auto`;
-    
+
             fetch(api)
                 .then(response => {
                     return response.json();
                 })
                 .then(data => {
-                    const { temperature, summary, icon } = data.currently;
+                    const { temperature, icon } = data.currently;
+                    // debugger;
                     temperatureDegree.textContent = temperature;
-                    temperatureDescription.textContent = summary;
-                    locationTimezone.textContent = data.timezone;
-    
+                    // temperatureDescription.textContent = summary;
+                    // locationTimezone.textContent = data.timezone;
+
                     let celsius = (temperature - 32) * (5 / 9)
-    
-                    setIcons(icon, document.querySelector('.icon'));
-    
-                    temperatureSection. addEventListener('click', () => {
-                        if(temperatureSpan.textContent === "F"){
+
+                    setIcons(icon, document.querySelector('.weather-icon'));
+
+                    temperatureDegree.addEventListener('click', () => {
+                        // debugger;
+                        if (temperatureSpan.textContent === "F") {
                             temperatureSpan.textContent = "C";
+                            
                             temperatureDegree.textContent = Math.floor(celsius);
                         } else {
                             temperatureSpan.textContent = "F";
@@ -42,14 +48,13 @@ function getWeather (date) {
                 });
         });
     }
-} 
 
 
-function setIcons(icon, iconID) {
-    const skycons = new Skycons({ color: "white" });
-    const currentIcon = icon.replace(/-/g, "_").toUpperCase();
-    skycons.play();
-    return skycons.set(iconID, Skycons[currentIcon]);
+    function setIcons(icon, iconID) {
+        const skycons = new Skycons({ color: "white" });
+        const currentIcon = icon.replace(/-/g, "_").toUpperCase();
+        skycons.play();
+        return skycons.set(iconID, Skycons[currentIcon]);
+    }
 }
-
-export { getWeather, setIcons };
+export { getWeather };
