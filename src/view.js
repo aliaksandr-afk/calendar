@@ -11,7 +11,8 @@ class View extends EventEmitter {
         this.tableHead = null;
         this.tableBody = null;
         this.calendarInfo = createElement('div', { className: 'calendarInfo' },
-            createElement('div', { className: 'date-info' }));
+            createElement('div', { className: 'date-info' }),
+            createElement('div', { className: 'weather-info' }));
 
         this.yearSelect = null;
         this.monthSelect = null;
@@ -226,13 +227,13 @@ class View extends EventEmitter {
                 createElement('h2', { className: 'temperature-section' }), createElement('span', { textContent: 'C' }))
         );
 
+        this.calendarInfo.removeChild(this.calendarInfo.children[1]);
         this.calendarInfo.removeChild(this.calendarInfo.children[0]);
         this.calendarInfo.appendChild(dateInfo);
         this.calendarInfo.appendChild(weatherInfo);
         this.list = document.querySelector('.todo-list');
         this.emit('check', date);
         getWeather();
-        // setIcons();
     }
 
     handleAdd(event, { year, month, date }) {
