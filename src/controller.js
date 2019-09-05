@@ -20,6 +20,8 @@ class Controller {
 
         view.addCalendarHeader(model.currentMonth, model.currentYear);
         this.addCalendar(model.currentMonth, model.currentYear);
+
+        this.weather = model.gettingWeather();
     }
 
     showInfo() {

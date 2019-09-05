@@ -9,7 +9,13 @@ class Model extends EventEmitter {
 
         this.DAYS_IN_WEEK = 7;
         this.ALL_WEEKS = 6;
-        
+        this.WEATHER_KEY = "ab1ea7fd597beb01d76e5f472986c7dd";
+    }
+
+    async gettingWeather () {
+        const api_url = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Mahilyow,by&appid=${this.WEATHER_KEY}&units=metric`);
+        const data = await api_url.json();
+        console.log(data);
     }
 
     get currentYear() {
