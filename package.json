@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack"
+    "build": "webpack",
+    "serv": "node server.js"
   },
   "devDependencies": {
     "webpack": "^2.6.1",

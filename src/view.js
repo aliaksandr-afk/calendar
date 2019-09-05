@@ -1,4 +1,5 @@
 import { EventEmitter, createElement } from './helpers';
+import { getWeather, setIcons } from './weather.api/weather';
 
 class View extends EventEmitter {
     constructor() {
@@ -11,7 +12,6 @@ class View extends EventEmitter {
         this.tableBody = null;
         this.calendarInfo = createElement('div', { className: 'calendarInfo' },
         createElement('div', { className: 'date-info' }));
-        
 
         this.yearSelect = null;
         this.monthSelect = null;
@@ -220,8 +220,15 @@ class View extends EventEmitter {
                 createElement('input', { className: 'add-input' }),
                 createElement('button', { className: 'add-button', type: 'submit' }, '+'))
         );
+
+        const weatherInfo = createElement('div', { className: 'weather-info' },
+        createElement('div', { className: 'weather-icon' }), createElement('div', { className: 'degree-section' },
+        createElement('h2', { className: 'temperature-section' }), createElement('span', { textContent: 'C' }))
+        );
+        
         this.calendarInfo.removeChild(this.calendarInfo.children[0]);
         this.calendarInfo.appendChild(dateInfo);
+        this.calendarInfo.appendChild(weatherInfo);
         this.list = document.querySelector('.todo-list');
         this.emit('check', date);
     }

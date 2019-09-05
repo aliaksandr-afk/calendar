@@ -23,7 +23,7 @@ class Controller {
     }
 
     showInfo() {
-        this.view.show(this.model.items);
+        // this.view.show(this.model.items);
     }
 
     prevMonth({month, year}) {

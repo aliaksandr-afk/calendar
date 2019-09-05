@@ -56,7 +56,6 @@ function save(data) {
 function load() {
     const string = localStorage.getItem('todos');
     const data = JSON.parse(string);
-    console.log(string);
 
     return data;
 }
