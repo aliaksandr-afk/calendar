@@ -10,7 +10,6 @@ class View extends EventEmitter {
         this.tableHead = null;
         this.tableBody = null;
 
-
         this.yearSelect = null;
         this.monthSelect = null;
         this.input = null;
@@ -238,6 +237,7 @@ class View extends EventEmitter {
                 createElement('h2', { className: 'weather-info__temperature-section' }), createElement('span', { textContent: 'C' }))
         );
 
+        this.calendarInfo.removeChild(this.calendarInfo.children[1]);
         this.calendarInfo.removeChild(this.calendarInfo.children[0]);
         this.calendarInfo.appendChild(dateInfo);
         this.calendarInfo.appendChild(weatherInfo);
