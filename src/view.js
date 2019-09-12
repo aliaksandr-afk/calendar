@@ -1,17 +1,15 @@
 import { EventEmitter, createElement } from './helpers';
-import { getWeather} from './weather.api/weather';
+import { getWeather } from './weather.api/weather';
 
 class View extends EventEmitter {
     constructor() {
         super();
-        // getWeather(
         this.calendar = document.getElementById('calendar');
 
         this.table = null;
         this.tableHead = null;
         this.tableBody = null;
-        this.calendarInfo = createElement('div', { className: 'calendarInfo' },
-            createElement('div', { className: 'date-info' }));
+
 
         this.yearSelect = null;
         this.monthSelect = null;
@@ -44,25 +42,39 @@ class View extends EventEmitter {
     }
 
     createCalendar(currentMonth, currentYear) {
-        this.tableBody = createElement('tbody', null);
+        this.tableBody = createElement('div', { clasName: "calendar-body__body" },
+            createElement('tbody', null)
+        )
 
-        this.tableHead = createElement('thead', null,
-            ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(weekday =>
-                createElement('th', null, weekday)
+
+
+
+        this.tableHead = createElement('div', { className: 'calendar-body__head' },
+            createElement('thead', null,
+                ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(weekday =>
+                    createElement('th', null, weekday)
+                )
             )
-        );
+        )
+
+
+
+
         this.table = createElement('table', { className: 'calendar-body' },
             this.tableHead,
             this.tableBody
         );
 
+        this.calendarInfo = createElement('div', { className: 'calendar-info' },
+            createElement('div', { className: 'date-info' }));
+
         const prevMonthButton = createElement('button', {
-            className: 'button',
+            className: 'calendar-head__button',
             onclick: this.handlePrevMonthButtonClick.bind(this)
         }, '<');
 
         const nextMonthButton = createElement('button', {
-            className: 'button',
+            className: 'calendar-head__button',
             onclick: this.handleNextMonthButtonClick.bind(this)
         }, '>');
 
@@ -88,11 +100,11 @@ class View extends EventEmitter {
             )
         );
 
-        const calendarWrap = createElement('div', { id: 'calendar-wrap' },
+        const calendarWrap = createElement('div', { class: 'calendar-wrap' },
             createElement('div', { className: 'calendar-head' },
                 prevMonthButton,
-                createElement('div', { className: 'select' }, this.monthSelect),
-                createElement('div', { className: 'select' }, this.yearSelect),
+                createElement('div', { className: 'calendar-head__select' }, this.monthSelect),
+                createElement('div', { className: 'calendar-head__select' }, this.yearSelect),
                 nextMonthButton
             ),
             this.table,
@@ -212,9 +224,9 @@ class View extends EventEmitter {
         let year = this.year;
         let month = this.month;
         const dateInfo = createElement('div', { className: 'date-info' },
-            createElement('ul', { className: 'todo-list' }),
+            createElement('ul', { className: 'date-info__todo-list' }),
             createElement('form', {
-                className: 'todo-form',
+                className: 'date-info__form',
                 onsubmit: (event) => this.handleAdd(event, { year, month, date })
             },
                 createElement('input', { className: 'add-input' }),
@@ -222,8 +234,8 @@ class View extends EventEmitter {
         );
 
         const weatherInfo = createElement('div', { className: 'weather-info' },
-            createElement('canvas', { className: 'weather-icon', width: '128', height: '128' }), createElement('div', { className: 'degree-section' },
-                createElement('h2', { className: 'temperature-section' }), createElement('span', { textContent: 'C' }))
+            createElement('canvas', { className: 'weather-info__icon', width: '128', height: '128' }), createElement('div', { className: 'weather-info__degree-section' },
+                createElement('h2', { className: 'weather-info__temperature-section' }), createElement('span', { textContent: 'C' }))
         );
 
         this.calendarInfo.removeChild(this.calendarInfo.children[0]);
@@ -232,7 +244,6 @@ class View extends EventEmitter {
         this.list = document.querySelector('.todo-list');
         this.emit('check', date);
         getWeather();
-        // setIcons();
     }
 
     handleAdd(event, { year, month, date }) {

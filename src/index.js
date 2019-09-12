@@ -4,8 +4,6 @@ import Controller from './controller';
 import { save, load } from './helpers';
 
 const state = load();
-console.log(state);
-// debugger;
 
 const model = new Model(state || undefined);
 model.on('change', state => save(state));
