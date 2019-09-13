@@ -41,31 +41,31 @@ class View extends EventEmitter {
     }
 
     createCalendar(currentMonth, currentYear) {
-        this.tableBody = createElement('div', { clasName: "calendar-body__body" },
+        this.tableBody = createElement('div', { className: 'calendar-body__body' },
             createElement('tbody', null)
         )
 
-
-
-
-        this.tableHead = createElement('div', { className: 'calendar-body__head' },
-            createElement('thead', null,
-                ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(weekday =>
-                    createElement('th', null, weekday)
-                )
+        this.tableHead = createElement('thead', null,
+            ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(weekday =>
+                createElement('th', null, weekday)
             )
         )
 
 
-
-
-        this.table = createElement('table', { className: 'calendar-body' },
+        this.table = createElement('table', { className: 'calendar-body__table' },
             this.tableHead,
             this.tableBody
-        );
+        )
+
+        this.tableWrap = createElement('div', { className: 'calendar-body__wrap' },
+            this.table
+        )
+
+
 
         this.calendarInfo = createElement('div', { className: 'calendar-info' },
-            createElement('div', { className: 'date-info' }));
+            createElement('div', { className: 'date-info' }),
+            createElement('div', { className: 'weather-info' }));
 
         const prevMonthButton = createElement('button', {
             className: 'calendar-head__button',
@@ -99,14 +99,14 @@ class View extends EventEmitter {
             )
         );
 
-        const calendarWrap = createElement('div', { class: 'calendar-wrap' },
+        const calendarWrap = createElement('div', { className: 'calendar-wrap' },
             createElement('div', { className: 'calendar-head' },
                 prevMonthButton,
                 createElement('div', { className: 'calendar-head__select' }, this.monthSelect),
                 createElement('div', { className: 'calendar-head__select' }, this.yearSelect),
                 nextMonthButton
             ),
-            this.table,
+            this.tableWrap,
         );
         return calendarWrap;
     }
@@ -241,7 +241,7 @@ class View extends EventEmitter {
         this.calendarInfo.removeChild(this.calendarInfo.children[0]);
         this.calendarInfo.appendChild(dateInfo);
         this.calendarInfo.appendChild(weatherInfo);
-        this.list = document.querySelector('.todo-list');
+        this.list = document.querySelector('.date-info__todo-list');
         this.emit('check', date);
         getWeather();
     }

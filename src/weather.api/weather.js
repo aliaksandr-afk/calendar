@@ -4,12 +4,12 @@ function getWeather(date) {
 let long;
 let lat;
 let WEATHER_KEY = "83b6660876df25f1d7d419c755b6846b";
-let temperatureSection = document.querySelector('.degree-section');
+let temperatureSection = document.querySelector('.weather-info__degree-section');
 console.log(temperatureSection);
-let temperatureDegree = document.querySelector('.temperature-section');
+let temperatureDegree = document.querySelector('.weather-info__temperature-section');
 console.log(temperatureDegree);
 
-const temperatureSpan = document.querySelector('.degree-section span')
+const temperatureSpan = document.querySelector('.weather-info__degree-section span')
 console.log(temperatureSpan);
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
@@ -25,17 +25,13 @@ console.log(temperatureSpan);
                 })
                 .then(data => {
                     const { temperature, icon } = data.currently;
-                    // debugger;
                     temperatureDegree.textContent = temperature;
-                    // temperatureDescription.textContent = summary;
-                    // locationTimezone.textContent = data.timezone;
 
                     let celsius = (temperature - 32) * (5 / 9)
 
-                    setIcons(icon, document.querySelector('.weather-icon'));
+                    setIcons(icon, document.querySelector('.weather-info__weather-icon'));
 
                     temperatureDegree.addEventListener('click', () => {
-                        // debugger;
                         if (temperatureSpan.textContent === "F") {
                             temperatureSpan.textContent = "C";
                             
