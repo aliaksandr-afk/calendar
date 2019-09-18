@@ -1,5 +1,45 @@
-.button {
+.button, .select{
+    background: 0 0;
+    border: none;
+    border-radius: 2px;
+    color: #ffffff;
+    position: relative;
+    /* height: 2em; */
+    margin: 0;
+    /* min-width: 64px; */
+    padding: 0 .4em;
+    display: inline-block;
+    font-family: "Consolas","Helvetica","Arial",sans-serif;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    overflow: hidden;
+    will-change: box-shadow;
+    transition: box-shadow .2s cubic-bezier(.4,0,1,1),background-color .2s cubic-bezier(.4,0,.2,1),color .2s cubic-bezier(.4,0,.2,1);
+    outline: none;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    line-height: 2em;
+    vertical-align: middle;
+}
 
+.select option {
+    color: rgba(255,255,255,.9);
+    background: rgb(47, 120, 163);
+}
+
+.select option:hover, .select option:active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.button:hover, .select:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.button:active, .select:active {
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 .w-100 {
@@ -33,6 +73,7 @@
 
 .calendar-wrap {
     padding: 10% 0;
+    border-right: 2px solid white;
 }
 
 .calendar-head {
@@ -41,7 +82,7 @@
     justify-content: center;
     text-align: center;
     padding: 4%;
-    border: 1px solid white;
+    /* border: 1px solid white; */
 }
 
 .calendar-body__wrap {
@@ -55,21 +96,52 @@
 
 thead {
     background: rgb(47,150,163);
-    /* border-radius: 100px; */
 }
 
-.calendar-info, .date-info, .weather-info{
+.calendar-info{
     display: flex;
     flex-direction: column;
     text-align: center;
+    padding: 4%;
+    /* min-height: 100%; */
 }
 
 .date-info {
     display: flex;
     flex-direction: column;
     text-align: center;
-    /* width: 50%;
-    height: 100%; */
+    height: 50%;
+}
+
+.date-info__form {
+    border-top: 1px solid rgba(0,0,0,.1);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.date-info__add-input {
+    flex: 0.5;
+    outline: none;
+    transition: all .2s;
+}
+
+.input {
+    font-family: 'Consolas', Arial, Helvetica, sans-serif;
+    /* font-size: 1em; */
+    color: #757575;
+    /* padding: .2em; */
+    border-radius: 2px;
+    border: none;
+    background: rgba(255, 255, 255, 0.466);
+}
+
+.input:focus {
+    background: rgba(255, 255, 255, 0.822);
+}
+
+.input:hover {
+    background: rgba(255, 255, 255, 0.822);
 }
 
 .todo-list {
@@ -77,6 +149,7 @@ thead {
     flex-direction: column;
     text-align: center;
     justify-content: center;
+    padding: 0px;
 }
 
 .todo-item {
@@ -84,76 +157,132 @@ thead {
     flex-direction: row;
     text-align: center;
     justify-content: space-between;
+    padding: 0.6em;
+    /* font-weight: bold; */
 }
 
-.todo-item__checkbox {
-    display: inline-block;
-    border-color: #60a3d8 #2970a9 #2970a9 #60a3d8;
-    border-radius: 50%;
-    text-shadow: #2e7ebd 0 1px 2px;
-    margin: 2.5%;
+.todo-item.editing .todo-item__check-label,
+.todo-item.editing .todo-item__title {
+    display: none;
+}
+
+.todo-item.editing .todo-item__textfield {
+    display: block;
+    flex: 1;
+    margin-right: 16px;
 }
 
 .todo-item__title {
-    margin: 2%;
+    /* text-align: center; */
+    padding: 0.2em;
+    font-size: 1em;
+}
+
+.todo-item__edit {
+    /* text-align: center; */
+
+    /* padding: 0.4em; */
+    font-size: 1.2em;
+}
+
+.todo-item__remove {
+    /* text-align: center; */
+
+    /* padding: 0.4em; */
+    font-size: 1.8em;
+}
+
+.todo-item__check-label {
+     display: flex;
+  position: relative;
+  /* border: 1px solid red; */
+  width: 1em;
+  height: 1em;
+  padding: 0.6em;
+  /* text-align: center; */
+  /*padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 12px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; */
+}
+
+.todo-item__checkbox {
+    position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.todo-item__checkmark {
+    position: absolute;
+  top: 26%;
+  left: 20%;
+  height: 0.8em;
+  width: 0.8em;
+  background-color: #eee;
+  border-radius: 0.2em;
+}
+
+.todo-item__check-label:hover input ~ .todo-item__checkmark {
+    background-color: #ccc;
+  }
+
+  .todo-item__check-label input:checked ~ .todo-item__checkmark {
+    background-color: #2196F3;
+  }
+
+  .todo-item__checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  .todo-item__check-label input:checked ~ .todo-item__checkmark:after {
+    display: block;
+  }
+
+  .todo-item__check-label .todo-item__checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+.todo-item__title {
+    margin-right: auto;
 }
 
 .todo-item__textfield {
-    margin: 2%;
+    /* margin: 2%; */
+    display: none;
+    /* width: 4%; */
 }
 
-.button, .select, .todo-item__edit, .todo-item__remove, .todo-item__add-button {
-    display: inline-block;
-    font-size: 80%;
-    color: rgba(255,255,255,.9);
-    text-shadow: #2e7ebd 0 1px 2px;
-    text-decoration: none;
-    text-align: center;
-    line-height: 1.1;
-    white-space: pre-line;
-    border: 1px solid;
-    border-color: #60a3d8 #2970a9 #2970a9 #60a3d8;
-    border-radius: 6px;
-    outline: none;
-    background: #60a3d8 linear-gradient(#89bbe2, #60a3d8 50%, #378bce);
-    box-shadow: inset rgba(255,255,255,.5) 1px 1px;
-  }
-
-  .calendar-head__button {
+.calendar-head__button {
     width: 15%;
     height: 30%;
   }
 
-  .button:first-line, .select:first-line{
-    font-size: 170%;
-    font-weight: 700;
-  }
-  .button:hover, .select:hover {
-    color: rgb(255,255,255);
-    background-image: linear-gradient(#9dc7e7, #74afdd 50%, #378bce);
-  }
-  .button:active, .select:active {
-    color: rgb(255,255,255);
-    border-color: #2970a9;
-    background-image: linear-gradient(#5796c8, #6aa2ce);
-    box-shadow: none;
-  }
+.weather-info {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: space-evenly;
+}
 
-  /* select {
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-        font-size: 80%;
-        color: rgba(255,255,255,.9);
-        text-shadow: #2e7ebd 0 1px 2px;
-        text-decoration: none;
-        text-align: center;
-        line-height: 1.1;
-        white-space: pre-line;
-        border: 1px solid;
-        border-color: #60a3d8 #2970a9 #2970a9 #60a3d8;
-        border-radius: 6px;
-        outline: none;
-        background: #60a3d8 linear-gradient(#89bbe2, #60a3d8 50%, #378bce);
-        box-shadow: inset rgba(255,255,255,.5) 1px 1px;
-  } */
+.weather-info__degree-section {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: space-around;
+}

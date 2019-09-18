@@ -5,17 +5,17 @@ let long;
 let lat;
 let WEATHER_KEY = "83b6660876df25f1d7d419c755b6846b";
 let temperatureSection = document.querySelector('.weather-info__degree-section');
-console.log(temperatureSection);
+// console.log(temperatureSection);
 let temperatureDegree = document.querySelector('.weather-info__temperature-section');
-console.log(temperatureDegree);
+// console.log(temperatureDegree);
 
 const temperatureSpan = document.querySelector('.weather-info__degree-section span')
-console.log(temperatureSpan);
+// console.log(temperatureSpan);
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
             long = position.coords.longitude;
             lat = position.coords.latitude;
-
+            
             const proxy = 'https://cors-anywhere.herokuapp.com/';
             const api = `${proxy}https://api.darksky.net/forecast/${WEATHER_KEY}/${lat},${long},255657600?exclude=minutely,hourly,lang=ru,units=auto,alerts,flags&units=auto`;
 
@@ -29,15 +29,15 @@ console.log(temperatureSpan);
 
                     let celsius = (temperature - 32) * (5 / 9)
 
-                    setIcons(icon, document.querySelector('.weather-info__weather-icon'));
+                    setIcons(icon, document.querySelector('.weather-info__icon'));
 
                     temperatureDegree.addEventListener('click', () => {
-                        if (temperatureSpan.textContent === "F") {
-                            temperatureSpan.textContent = "C";
+                        if (temperatureSpan.textContent === "°F") {
+                            temperatureSpan.textContent = "°C";
                             
                             temperatureDegree.textContent = Math.floor(celsius);
                         } else {
-                            temperatureSpan.textContent = "F";
+                            temperatureSpan.textContent = "°F";
                             temperatureDegree.textContent = temperature;
                         }
                     })

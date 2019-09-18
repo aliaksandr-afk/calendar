@@ -15,7 +15,7 @@ class Model extends EventEmitter {
     async gettingWeather () {
         const api_url = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Mahilyow,by&appid=${this.WEATHER_KEY}&units=metric`);
         const data = await api_url.json();
-        console.log(data);
+        // console.log(data);
     }
 
     get currentYear() {
@@ -134,7 +134,7 @@ class Model extends EventEmitter {
 
     updateItem(id, data) {
         const item = this.getItem(id);
-
+        // debugger;
         Object.keys(data).forEach(prop => item[prop] = data[prop]);
 
         this.emit('change', this.items);

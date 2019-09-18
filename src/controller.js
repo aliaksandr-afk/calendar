@@ -60,6 +60,7 @@ class Controller {
     }
 
     toggleTodo({ id, completed }) {
+        // debugger;
         const item = this.model.updateItem(id, { completed });
 
         this.view.toggleItem(item);

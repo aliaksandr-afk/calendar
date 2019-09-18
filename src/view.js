@@ -18,7 +18,7 @@ class View extends EventEmitter {
 
         this.MONTH_NAMES = [
             'Январь',
-            'Феварль',
+            'Февраль',
             'Март',
             'Апрель',
             'Май',
@@ -193,11 +193,20 @@ class View extends EventEmitter {
 
     createListItem(todo) {
         const checkbox = createElement('input', { type: 'checkbox', className: 'todo-item__checkbox', checked: todo.completed ? 'checked' : '' });
+        const checklabel = createElement('label', { className: 'todo-item__check-label' },
+        checkbox,
+        createElement('span', { className: 'todo-item__checkmark'})
+        )
+        // console.log(checkbox);
+        // debugger;
+        
         const label = createElement('label', { className: 'todo-item__title' }, todo.title);
-        const editInput = createElement('input', { type: 'text', className: 'todo-item__textfield' });
-        const editButton = createElement('button', { className: 'todo-item__edit button' }, 'Изменить');
+
+        const editInput = createElement('input', { type: 'text', className: 'todo-item__textfield input' });
+
+        const editButton = createElement('button', { className: 'todo-item__edit button' }, '✎');
         const deleteButton = createElement('button', { className: 'todo-item__remove button' }, '-');
-        const item = createElement('li', { className: `todo-item${todo.completed ? ' completed' : ''}`, 'data-id': todo.id }, checkbox, label, editInput, editButton, deleteButton);
+        const item = createElement('li', { className: `todo-item${todo.completed ? ' completed' : ''}`, 'data-id': todo.id }, checklabel, label, editInput, editButton, deleteButton);
 
         return this.addEventListeners(item);
     }
@@ -206,11 +215,10 @@ class View extends EventEmitter {
         const checkbox = item.querySelector('.todo-item__checkbox');
         const editButton = item.querySelector('button.todo-item__edit');
         const removeButton = item.querySelector('button.todo-item__remove');
-
+        // console.log(checkbox);
         checkbox.addEventListener('change', this.handleToggle.bind(this));
         editButton.addEventListener('click', this.handleEdit.bind(this));
         removeButton.addEventListener('click', this.handleRemove.bind(this));
-
         return item;
     }
 
@@ -230,13 +238,13 @@ class View extends EventEmitter {
                 className: 'date-info__form',
                 onsubmit: (event) => this.handleAdd(event, { year, month, date })
             },
-                createElement('input', { className: 'todo-item__add-input' }),
-                createElement('button', { className: 'todo-item__add-button button', type: 'submit' }, '+'))
+                createElement('input', { className: 'date-info__add-input input' }),
+                createElement('button', { className: 'date-info__add-button button', type: 'submit' }, '+'))
         );
 
         const weatherInfo = createElement('div', { className: 'weather-info' },
             createElement('canvas', { className: 'weather-info__icon', width: '128', height: '128' }), createElement('div', { className: 'weather-info__degree-section' },
-                createElement('h2', { className: 'weather-info__temperature-section' }), createElement('span', { textContent: 'C' }))
+                createElement('h2', { className: 'weather-info__temperature-section' }), createElement('span', { textContent: '°C' }))
         );
 
         this.calendarInfo.removeChild(this.calendarInfo.children[1]);
@@ -250,15 +258,17 @@ class View extends EventEmitter {
 
     handleAdd(event, { year, month, date }) {
         event.preventDefault();
-        this.input = document.querySelector('.todo-item__add-input');
+        this.input = document.querySelector('.date-info__add-input');
         if (!this.input.value) return alert('Необходимо ввести название задачи.');
 
         const title = this.input.value;
         this.emit('add', { title, year, month, date });
     }
-
+    
     handleToggle({ target }) {
-        const listItem = target.parentNode;
+        
+        const listItem = target.parentNode.parentNode;
+        console.log(listItem);
         const id = listItem.getAttribute('data-id');
         const completed = target.checked;
 
@@ -270,7 +280,7 @@ class View extends EventEmitter {
         const id = listItem.getAttribute('data-id');
         const label = listItem.querySelector('.todo-item__title');
         const input = listItem.querySelector('.todo-item__textfield');
-        const editButton = listItem.querySelector('button.todo-item__editedit');
+        const editButton = listItem.querySelector('button.todo-item__edit');
         const title = input.value;
         const isEditing = listItem.classList.contains('editing');
 
@@ -278,7 +288,7 @@ class View extends EventEmitter {
             this.emit('edit', { id, title });
         } else {
             input.value = label.textContent;
-            editButton.textContent = 'Сохранить';
+            editButton.textContent = '✔';
             listItem.classList.add('editing');
         }
     }
@@ -324,7 +334,7 @@ class View extends EventEmitter {
         const editButton = listItem.querySelector('button.todo-item__edit');
 
         label.textContent = todo.title;
-        editButton.textContent = 'Изменить';
+        editButton.textContent = '✎';
         listItem.classList.remove('editing');
     }
 
