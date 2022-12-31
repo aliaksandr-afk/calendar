@@ -8,7 +8,7 @@
     "serv": "node server.js"
   },
   "devDependencies": {
-    "webpack": "^2.6.1",
+    "webpack": "^5.75.0",
     "webpack-dev-server": "^2.4.5"
   }
 }
